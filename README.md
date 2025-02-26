@@ -20,4 +20,4 @@ Log:
 15. npm install bootstrap
 16. npm install -D css-loader postcss-loader sass sass-loader style-loader
 17. Create src/styles.scss with @import "~bootstrap/scss/bootstrap";
-18. 
+18. Deploy to Versel
