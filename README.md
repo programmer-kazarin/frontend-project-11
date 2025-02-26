@@ -17,3 +17,7 @@ Log:
 12. npm install -D html-webpack-plugin
 13. npm install -D webpack-dev-server
 14. package.json add "type": "module",
+15. npm install bootstrap
+16. npm install -D css-loader postcss-loader sass sass-loader style-loader
+17. Create src/styles.scss with @import "~bootstrap/scss/bootstrap";
+18. 
