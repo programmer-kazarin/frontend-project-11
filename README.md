@@ -2,6 +2,8 @@
 [![Actions Status](https://github.com/programmer-kazarin/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/programmer-kazarin/frontend-project-11/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/982483ba03a62ea85671/maintainability)](https://codeclimate.com/github/programmer-kazarin/frontend-project-11/maintainability)
 
+[Ссылка на получившийся сайт](https://v0-new-project-2up9gbfhbls.vercel.app/)
+
 Log:
 1. Create .gitignore file
 2. npm init
