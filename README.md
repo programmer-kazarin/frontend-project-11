@@ -14,4 +14,6 @@ Log:
 9. create src/index.js
 10. webpack.config.js from https://github.com/hexlet-boilerplates/webpack-package/blob/main/webpack.config.js
 11. Makefile
-12. 
+12. npm install -D html-webpack-plugin
+13. npm install -D webpack-dev-server
+14. package.json add "type": "module",
