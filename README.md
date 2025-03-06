@@ -5,6 +5,7 @@
 [Ссылка на получившийся сайт](https://v0-new-project-2up9gbfhbls.vercel.app/)
 
 Log:
+I. 
 1. Create .gitignore file
 2. npm init
 3. Codeclimate badge
@@ -23,3 +24,7 @@ Log:
 16. npm install -D css-loader postcss-loader sass sass-loader style-loader
 17. Create src/styles.scss with @import "~bootstrap/scss/bootstrap";
 18. Deploy to Versel
+II.
+19. Create 'src/init.js' with default function.
+20. npm install on-change
+21. Вынесите слой View (тот, где вотчеры) в отдельный файл. 'src/watchers.js'
