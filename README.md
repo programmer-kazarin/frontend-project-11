@@ -28,3 +28,5 @@ II.
 19. Create 'src/init.js' with default function.
 20. npm install on-change
 21. Вынесите слой View (тот, где вотчеры) в отдельный файл. 'src/watchers.js'
+22. npm install yup
+23. После отправки данных формы, производить валидацию и подсвечивать красным рамку вокруг инпута, если адрес невалидный.
