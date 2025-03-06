@@ -9,7 +9,7 @@ export default () => {
   };
 
   const initState = {
-    rssLink: null,
+    feeds: [],
     form: {
       error: null,
       valid: false,
@@ -22,15 +22,23 @@ export default () => {
 
   elements.form.addEventListener('submit', (event) => {
     event.preventDefault();
+    console.log('EVENT');
     const data = new FormData(event.target);
     const url = data.get('url');
     schema.validate(url)
       .then((validatedUrl) => {
-        watchedState.rssLink = validatedUrl;
-        watchedState.form = {
-          error: null,
-          valid: true,
-        };
+        if (initState.feeds.includes(validatedUrl)) {
+          watchedState.form = {
+            error: 'duplicate',
+            valid: false,
+          };
+        } else {
+          watchedState.feeds.push(validatedUrl);
+          watchedState.form = {
+            error: null,
+            valid: true,
+          };
+        }
       })
       .catch((error) => {
         console.log(error);
