@@ -1,6 +1,6 @@
 import onChange from 'on-change';
 
-export default (state, elements) => {
+export default (state, elements, i18next) => {
   const watchedState = onChange(state, (path) => {
     console.log(path);
     const { input, feedback } = elements;
@@ -16,7 +16,7 @@ export default (state, elements) => {
           console.log(state.form.error);
           input.classList.add('is-invalid');
           feedback.classList.add('text-danger');
-          feedback.textContent = state.form.error;
+          feedback.textContent = i18next.t(`errors.${state.form.error}`);
         }
         break;
       default:

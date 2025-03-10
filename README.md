@@ -31,3 +31,10 @@ II.
 22. npm install yup
 23. После отправки данных формы, производить валидацию и подсвечивать красным рамку вокруг инпута, если адрес невалидный.
 24. Валидировать дубли. После того как поток добавлен, форма принимает первоначальный вид.
+III.
+25. npm install i18next
+26. i18next create instance and init
+27. Create src/locales/ru.js with translation object.
+28. Create src/locales/index.js
+29. Create src/locales/locale.js with locale mapping.
+30. src/watchers.js - error messages from i18next.
