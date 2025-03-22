@@ -38,3 +38,13 @@ III.
 28. Create src/locales/index.js
 29. Create src/locales/locale.js with locale mapping.
 30. src/watchers.js - error messages from i18next.
+IV.
+31. npm install axios
+32. Add proxy for URL with hexlet-allorigins: 'src/url_proxy.js'. https://github.com/Hexlet/hexlet-allorigins
+33. Create src/utils.js with loadRss and getLoadingErrorType functions.
+34. Function loadRss with axios get request.
+35. Function parseRss in src/utils.js
+36. npm install lodash
+37. Add parsed object to feeds and posts in state.
+38. Add feeds and posts elements to elements object.
+39. Add handleLoadingStatus, handleFeeds, handlePosts to src/watchers.js.
