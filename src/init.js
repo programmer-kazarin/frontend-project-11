@@ -9,6 +9,8 @@ import resources from './locales/index.js';
 import { addProxy, getLoadingErrorType, parseRss } from './utils.js';
 
 export default () => {
+  const POST_REQUESTS_TIME_INTERVAL = 5000;
+
   const elements = {
     form: document.querySelector('.rss-form'),
     input: document.querySelector('.rss-form input'),
@@ -22,6 +24,7 @@ export default () => {
     feeds: [],
     posts: [],
     form: {
+      url: null,
       error: null,
       valid: true,
     },
@@ -54,14 +57,12 @@ export default () => {
           id: _.uniqueId(),
         }));
         state.posts.unshift(...posts);
+        console.log(`before: ${state.feeds}`);
         state.feeds.unshift(feed);
-        state.loading.error = null;
-        state.loading.status = 'success';
-        state.form = {
-          ...state.form,
-          valid: true,
-          error: null,
-        };
+        console.log(`feed = ${JSON.stringify(feed)}`);
+        console.log(`after: ${state.feeds}`);
+        state.loading = { ...state.loading, error: null, status: 'success' };
+        state.form = { ...state.form, valid: true, error: null };
       })
       .catch((error) => {
         console.log(`ERROR: ${error}`);
@@ -71,6 +72,35 @@ export default () => {
           error: getLoadingErrorType(error),
         };
       });
+  };
+
+  const fetchNewPosts = (state) => {
+    console.log(`TIMER: + ${Date.now()}`);
+    console.log(JSON.stringify(state.feeds, null, 2));
+    const promises = state.feeds.map((feed) => {
+      console.log(`feed.url = ${feed.url}`);
+      return axios.get(addProxy(feed.url))
+        .then((response) => {
+          console.log('fetchNewPosts RESPONSE OK');
+          console.log(response);
+          const dataFromXml = parseRss(response.data.contents);
+          console.log('fetchNewPosts PARSE OK');
+          const postsFromState = state.posts.filter((post) => post.channelId === feed.id);
+          const newPosts = _.differenceWith(
+            dataFromXml.items,
+            postsFromState,
+            (p1, p2) => p1.title === p2.title,
+          )
+            .map((post) => ({ ...post, channelId: feed.id, id: _.uniqueId }));
+          state.posts.unshift(...newPosts);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+    Promise.all(promises).finally(() => {
+      setTimeout(() => fetchNewPosts(state), POST_REQUESTS_TIME_INTERVAL);
+    });
   };
 
   const i18nextInstance = i18next.createInstance();
@@ -99,13 +129,14 @@ export default () => {
             };
           } else {
             console.log('PUSH to FEEDS');
-            watchedState.feeds.push(validatedUrl);
             watchedState.form = {
               ...watchedState.form,
+              url: validatedUrl,
               error: null,
               valid: true,
             };
             loadRss(watchedState, validatedUrl);
+            setTimeout(() => fetchNewPosts(watchedState), POST_REQUESTS_TIME_INTERVAL);
           }
         })
         .catch((error) => {

@@ -48,3 +48,5 @@ IV.
 37. Add parsed object to feeds and posts in state.
 38. Add feeds and posts elements to elements object.
 39. Add handleLoadingStatus, handleFeeds, handlePosts to src/watchers.js.
+V.
+40. Add fetchNewPosts function with setTimeout.
