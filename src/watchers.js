@@ -113,7 +113,11 @@ const handlePosts = (state, elements, i18next) => {
 
       const hrefEl = document.createElement('a');
       hrefEl.setAttribute('href', post.link);
-      hrefEl.classList.add('fw-bold');
+      if (state.seenPosts.has(post.id)) {
+        hrefEl.classList.add('fw-normal');
+      } else {
+        hrefEl.classList.add('fw-bold');
+      }
       hrefEl.setAttribute('data-id', post.id);
       hrefEl.setAttribute('target', '_blank');
       hrefEl.setAttribute('rel', 'oopener noreferrer');
@@ -138,6 +142,14 @@ const handlePosts = (state, elements, i18next) => {
   }
 };
 
+const handleModal = (state, elements, i18next) => {
+  const modalEl = elements.modal;
+  const postToShow = state.posts.filter((post) => post.id === state.modal.postId)[0];
+  modalEl.querySelector('.modal-title').textContent = postToShow.title;
+  modalEl.querySelector('.modal-body').textContent = postToShow.description;
+  modalEl.querySelector('.btn-primary').setAttribute('href', postToShow.link);
+};
+
 export default (state, elements, i18next) => {
   const watchedState = onChange(state, (path) => {
     console.log(`ON CHANGE path : ${path}\n\tstatus: ${JSON.stringify(state, null, 2)}`);
@@ -153,7 +165,11 @@ export default (state, elements, i18next) => {
         handleFeeds(state, elements, i18next);
         break;
       case 'posts':
+      case 'seenPosts':
         handlePosts(state, elements, i18next);
+        break;
+      case 'modal.postId':
+        handleModal(state, elements, i18next);
         break;
       default:
         console.log('DEFAULT TADAM');

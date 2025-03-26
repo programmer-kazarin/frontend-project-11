@@ -18,6 +18,7 @@ export default () => {
     submit: document.querySelector('.rss-form button[type="submit"]'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
+    modal: document.getElementById('modal'),
   };
 
   const initState = {
@@ -32,6 +33,10 @@ export default () => {
       error: null,
       status: 'idle', // idle, success, failed, loading
     },
+    modal: {
+      postId: null,
+    },
+    seenPosts: new Set(),
   };
 
   const loadRss = (watchedState, url) => {
@@ -108,6 +113,7 @@ export default () => {
     lng: 'ru',
     resources,
   }).then(() => {
+    console.log('INIT START');
     yup.setLocale(locale);
     const schema = yup.string().required().url().notOneOf(initState.feeds);
 
@@ -147,6 +153,18 @@ export default () => {
           };
         });
     });
+
+    elements.posts.addEventListener('click', (event) => {
+      console.log(`POSTS EVENT dataset = ${JSON.stringify(event.target.dataset)}`);
+      if (!('id' in event.target.dataset)) {
+        console.log('no id in dataset');
+        return;
+      }
+      const { id } = event.target.dataset;
+      watchedState.modal.postId = id;
+      watchedState.seenPosts.add(id);
+    });
+    console.log('INIT FINISH');
   });
   return promise;
 };

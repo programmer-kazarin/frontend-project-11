@@ -50,3 +50,8 @@ IV.
 39. Add handleLoadingStatus, handleFeeds, handlePosts to src/watchers.js.
 V.
 40. Add fetchNewPosts function with setTimeout.
+VI.
+41. Add modal.postId and seenPosts set to state.
+42. Add eventListener for click on posts erea.
+43. Update handlePosts function for seen posts.
+44. Add handleModal for showing modal window with post.
