@@ -16,17 +16,14 @@ const getLoadingErrorType = (error) => {
 };
 
 const parseRss = (xmlData) => {
-  console.log('PARSE RSS');
   const dom = new DOMParser().parseFromString(xmlData, 'text/xml');
   const parseError = dom.querySelector('parsererror');
   if (parseError) {
-    console.log('PARSE RSS ERROR');
     const error = new Error(parseError.textContent);
     error.isParsingError = true;
     error.data = xmlData;
     throw error;
   }
-  console.log('PARSE RSS NO ERROR');
   const channelTitle = dom.querySelector('channel > title').textContent;
   const channelDescription = dom.querySelector('channel > description').textContent;
   const items = [...dom.querySelectorAll('item')].map((item) => ({

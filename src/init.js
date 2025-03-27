@@ -108,7 +108,7 @@ export default () => {
       const url = data.get('url');
       schema.validate(url)
         .then((validatedUrl) => {
-          if (initState.feeds.includes(validatedUrl)) {
+          if (initState.feeds.find(feed => feed.url === validatedUrl)) {
             watchedState.form = {
               ...watchedState.form,
               error: 'duplicate',
