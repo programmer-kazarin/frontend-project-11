@@ -1,17 +1,13 @@
 import onChange from 'on-change';
 
 const handleForm = (state, elements, i18next) => {
-  console.log('HANDLE FORM');
   const { input, feedback } = elements;
   if (state.form.valid) {
-    console.log('FORM VALID');
     input.classList.remove('is-invalid');
     input.value = '';
     feedback.classList.remove('text-danger');
     input.focus();
   } else {
-    console.log('FORM NOT VALID');
-    console.log(state.form.error);
     input.classList.add('is-invalid');
     feedback.classList.add('text-danger');
     feedback.textContent = i18next.t(`errors.${state.form.error}`);
@@ -19,19 +15,16 @@ const handleForm = (state, elements, i18next) => {
 };
 
 const handleLoadingStatus = (state, elements, i18next) => {
-  console.log('HANDLE LOADING STATUS');
   const { input, feedback, submit } = elements;
   const { loading } = state;
   switch (loading.status) {
     case 'failed':
-      console.log('HANDLE LOADING STATUS FAILED');
       submit.disable = false;
       input.removeAttribute('readonly');
       feedback.classList.add('text-danger');
       feedback.textContent = i18next.t(`errors.${loading.error}`);
       break;
     case 'success':
-      console.log('HANDLE LOADING STATUS IDLE');
       submit.disable = false;
       input.removeAttribute('readonly');
       input.value = '';
@@ -40,7 +33,6 @@ const handleLoadingStatus = (state, elements, i18next) => {
       input.focus();
       break;
     case 'loading':
-      console.log('HANDLE LOADING STATUS LOADING');
       submit.disable = true;
       input.setAttribute('readonly', true);
       feedback.classList.remove('text-success');
@@ -142,7 +134,7 @@ const handlePosts = (state, elements, i18next) => {
   }
 };
 
-const handleModal = (state, elements, i18next) => {
+const handleModal = (state, elements) => {
   const modalEl = elements.modal;
   const postToShow = state.posts.filter((post) => post.id === state.modal.postId)[0];
   modalEl.querySelector('.modal-title').textContent = postToShow.title;
@@ -152,7 +144,6 @@ const handleModal = (state, elements, i18next) => {
 
 export default (state, elements, i18next) => {
   const watchedState = onChange(state, (path) => {
-    console.log(`ON CHANGE path : ${path}\n\tstatus: ${JSON.stringify(state, null, 2)}`);
     switch (path) {
       case 'form':
         handleForm(state, elements, i18next);
@@ -169,10 +160,9 @@ export default (state, elements, i18next) => {
         handlePosts(state, elements, i18next);
         break;
       case 'modal.postId':
-        handleModal(state, elements, i18next);
+        handleModal(state, elements);
         break;
       default:
-        console.log('DEFAULT TADAM');
         break;
     }
   });

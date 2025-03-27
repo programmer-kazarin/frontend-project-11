@@ -40,16 +40,12 @@ export default () => {
   };
 
   const loadRss = (watchedState, url) => {
-    console.log(`LOAD RSS state: ${JSON.stringify(initState, null, 2)}`);
     const state = watchedState;
     state.loading.status = 'loading';
     const proxyUrl = addProxy(url);
-    console.log(`loading Rss from: ${proxyUrl}`);
     return axios.get(proxyUrl)
       .then((response) => {
-        console.log('RESPONSE OK');
         const dataFromXml = parseRss(response.data.contents);
-        console.log('PARSE OK');
         const feed = {
           url,
           id: _.uniqueId(),
@@ -62,15 +58,11 @@ export default () => {
           id: _.uniqueId(),
         }));
         state.posts.unshift(...posts);
-        console.log(`before: ${state.feeds}`);
         state.feeds.unshift(feed);
-        console.log(`feed = ${JSON.stringify(feed)}`);
-        console.log(`after: ${state.feeds}`);
         state.loading = { ...state.loading, error: null, status: 'success' };
         state.form = { ...state.form, valid: true, error: null };
       })
       .catch((error) => {
-        console.log(`ERROR: ${error}`);
         state.loading = {
           ...state.loading,
           status: 'failed',
@@ -80,29 +72,21 @@ export default () => {
   };
 
   const fetchNewPosts = (state) => {
-    console.log(`TIMER: + ${Date.now()}`);
-    console.log(JSON.stringify(state.feeds, null, 2));
-    const promises = state.feeds.map((feed) => {
-      console.log(`feed.url = ${feed.url}`);
-      return axios.get(addProxy(feed.url))
-        .then((response) => {
-          console.log('fetchNewPosts RESPONSE OK');
-          console.log(response);
-          const dataFromXml = parseRss(response.data.contents);
-          console.log('fetchNewPosts PARSE OK');
-          const postsFromState = state.posts.filter((post) => post.channelId === feed.id);
-          const newPosts = _.differenceWith(
-            dataFromXml.items,
-            postsFromState,
-            (p1, p2) => p1.title === p2.title,
-          )
-            .map((post) => ({ ...post, channelId: feed.id, id: _.uniqueId }));
-          state.posts.unshift(...newPosts);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    });
+    const promises = state.feeds.map((feed) => axios.get(addProxy(feed.url))
+      .then((response) => {
+        const dataFromXml = parseRss(response.data.contents);
+        const postsFromState = state.posts.filter((post) => post.channelId === feed.id);
+        const newPosts = _.differenceWith(
+          dataFromXml.items,
+          postsFromState,
+          (p1, p2) => p1.title === p2.title,
+        )
+          .map((post) => ({ ...post, channelId: feed.id, id: _.uniqueId }));
+        state.posts.unshift(...newPosts);
+      })
+      .catch((error) => {
+        console.error(error);
+      }));
     Promise.all(promises).finally(() => {
       setTimeout(() => fetchNewPosts(state), POST_REQUESTS_TIME_INTERVAL);
     });
@@ -113,7 +97,6 @@ export default () => {
     lng: 'ru',
     resources,
   }).then(() => {
-    console.log('INIT START');
     yup.setLocale(locale);
     const schema = yup.string().required().url().notOneOf(initState.feeds);
 
@@ -121,20 +104,17 @@ export default () => {
 
     elements.form.addEventListener('submit', (event) => {
       event.preventDefault();
-      console.log('EVENT');
       const data = new FormData(event.target);
       const url = data.get('url');
       schema.validate(url)
         .then((validatedUrl) => {
           if (initState.feeds.includes(validatedUrl)) {
-            console.log('DUPLICATE');
             watchedState.form = {
               ...watchedState.form,
               error: 'duplicate',
               valid: false,
             };
           } else {
-            console.log('PUSH to FEEDS');
             watchedState.form = {
               ...watchedState.form,
               url: validatedUrl,
@@ -146,7 +126,6 @@ export default () => {
           }
         })
         .catch((error) => {
-          console.log(`EVENT ERROR: ${error.message}`);
           watchedState.form = {
             error: error.message.key,
             valid: false,
@@ -155,16 +134,13 @@ export default () => {
     });
 
     elements.posts.addEventListener('click', (event) => {
-      console.log(`POSTS EVENT dataset = ${JSON.stringify(event.target.dataset)}`);
       if (!('id' in event.target.dataset)) {
-        console.log('no id in dataset');
         return;
       }
       const { id } = event.target.dataset;
       watchedState.modal.postId = id;
       watchedState.seenPosts.add(id);
     });
-    console.log('INIT FINISH');
   });
   return promise;
 };

@@ -4,15 +4,15 @@ export default {
     posts: 'Посты',
     view: 'Просмотр',
     loading: {
-      success: 'RSS loaded!',
+      success: 'RSS успешно загружен',
     },
     errors: {
-      duplicate: 'Exists!',
-      empty: 'Empty!',
-      notUrl: 'Not URL!',
-      noRss: 'No RSS',
-      network: 'Network Error',
-      unknown: 'Unknown',
+      duplicate: 'RSS уже существует!',
+      empty: 'Не должно быть пустым!',
+      notUrl: 'сылка должна быть валидным URL',
+      noRss: 'Ресурс не содержит валидный RSS',
+      network: 'Ошибка сети',
+      unknown: 'неизвестная ошибка',
     },
   },
 };

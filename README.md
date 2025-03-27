@@ -55,3 +55,6 @@ VI.
 42. Add eventListener for click on posts erea.
 43. Update handlePosts function for seen posts.
 44. Add handleModal for showing modal window with post.
+VII. 
+45. Update interfeces textx. ru.js
+46. Remove console logs.
